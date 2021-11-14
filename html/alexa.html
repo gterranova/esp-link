@@ -1,0 +1,78 @@
+<!doctype html>
+<html><head>
+  <title>esp-link</title>
+  <link rel="stylesheet" href="/pure.css">
+  <link rel="stylesheet" href="/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/ui.js"></script>
+</head>
+<body>
+<div id="layout">
+  <div id="main">
+    <div class="header">
+      <div><img src="favicon.ico" height="64"><span class="jl">JEELABS</span></div>
+      <h1 style="margin-top:0"><span class="esp">esp</span>-link</h1>
+      <h2 id="version"></h2>
+    </div>
+
+    <div class="content">
+      <div class="pure-g">
+        <!-- LEFT COLUMN -->
+        <div class="pure-u-1 pure-u-md-1-2">
+          <div class="card">
+            <h1>Alexa Integration</h1>
+            <form action="#" id="alexa-form" class="pure-form" hidden>
+              <div>
+                <input type="checkbox" name="alexa-enable"/>
+                <label>Enable Alexa Integration</label>
+              </div>
+              <br>
+              <div class="form-horizontal">
+                <label for="wemo-emulation-ron" style="margin-right:1em">
+                  <input type="radio" name="wemo-emulation" value="true" id="wemo-emulation-ron"/>
+                  WEMO Emulation</label>
+                <label for="wemo-emulation-roff">
+                  <input type="radio" name="wemo-emulation" value="false" id="wemo-emulation-roff"/>
+                  HUE Bridge</label>
+              </div>  
+              <div class="pure-form-stacked">
+                <label>Number of devices</label>
+                <input type="text" name="alexa-devices"/>
+              </div>
+              <button id="alexa-button" type="submit" class="pure-button button-primary">
+                Update alexa settings!
+              </button>
+            </form>
+          </div>
+        </div>
+        <!-- RIGHT COLUMN -->
+        <div class="pure-u-1 pure-u-md-1-2">
+          <div class="card">
+            <h1>Devices</h1>
+            <div id="devices-spinner" class="spinner spinner-small"></div>
+            <div id="devices-table">
+              <form action="#" id="devicesform" class="pure-form pure-form-aligned form-narrow">
+                <input type="hidden" name="set-devices" value="1">
+                <button id="set-devices" type="submit" class="pure-button button-primary">Change!</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pure-g">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="alexa.js"></script>
+<script type="text/javascript">
+onLoad(function() {
+  fetchAlexa();
+  bnd($("#alexa-form"), "submit", changeAlexa);
+  bnd($("#devicesform"), "submit", changeDevices);
+  bnd($("#wemo-emulation-ron"), "click", doWemo);
+  bnd($("#wemo-emulation-roff"), "click", doHue);
+});
+</script>
+</body></html>

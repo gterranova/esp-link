@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  esplink:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment: 
+        FLASH_SIZE: 1MB
+    volumes: 
+      - ".:/esp-link"

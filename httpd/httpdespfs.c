@@ -174,17 +174,7 @@ error: // error response
 }
 #endif
 
-#if 0
 //cgiEspFsTemplate can be used as a template.
-
-typedef struct {
-	EspFsFile *file;
-	void *tplArg;
-	char token[64];
-	int tokenPos;
-} TplData;
-
-typedef void (* TplCallback)(HttpdConnData *connData, char *token, void **arg);
 
 int ICACHE_FLASH_ATTR cgiEspFsTemplate(HttpdConnData *connData) {
 	TplData *tpd=connData->cgiData;
@@ -204,7 +194,24 @@ int ICACHE_FLASH_ATTR cgiEspFsTemplate(HttpdConnData *connData) {
 	if (tpd==NULL) {
 		//First call to this cgi. Open the file so we can read it.
 		tpd=(TplData *)os_malloc(sizeof(TplData));
-		tpd->file=espFsOpen(connData->url);
+		char url[32];
+		char num[5];
+		os_bzero(url, sizeof(url));
+		os_bzero(num, sizeof(num));
+
+		char* src = connData->url;
+		char* dest = &url[0];
+		char* n = &num[0];
+		while(*src) {
+			if (*src>='0' && *src<='9') { *n++=*src++; continue; }
+        	*dest++ = *src++;
+		}
+		*dest = '\0';
+		*n = '\0';
+		tpd->count = atoi(num);
+		//os_printf("CONV: %s -> %s (%d)", connData->url, url, atoi(num));
+
+		tpd->file=espFsOpen(espLinkCtx, url);
 		tpd->tplArg=NULL;
 		tpd->tokenPos=-1;
 		if (tpd->file==NULL) {
@@ -227,6 +234,7 @@ int ICACHE_FLASH_ATTR cgiEspFsTemplate(HttpdConnData *connData) {
 
 	len=espFsRead(tpd->file, buff, 1024);
 	if (len>0) {
+		((TplCallback)(connData->cgiArg))(connData, "count", &tpd->tplArg);
 		sp=0;
 		e=buff;
 		for (x=0; x<len; x++) {
@@ -274,5 +282,4 @@ int ICACHE_FLASH_ATTR cgiEspFsTemplate(HttpdConnData *connData) {
 		return HTTPD_CGI_MORE;
 	}
 }
-#endif
 

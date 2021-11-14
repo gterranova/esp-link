@@ -43,6 +43,7 @@ typedef struct {
   int8_t   stop_bits;
   char     mqtt_password[70];          // MQTT password, was 32-char mqtt_old_password
   char     mqtt_username[70];          // MQTT username, was 32-char mqtt_old_username
+  uint8_t  alexa_enable, alexa_devices, wemo_emulation;
 } FlashConfig;
 extern FlashConfig flashConfig;
 

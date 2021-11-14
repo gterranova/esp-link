@@ -72,7 +72,7 @@ void pvPortFree(void *ptr);
 uint32 system_get_time();
 int rand(void);
 void ets_bzero(void *s, size_t n);
-//void ets_delay_us(int ms);
+void ets_delay_us(uint32_t ms);
 
 // disappeared in SDK 1.1.0:
 #define os_timer_done ets_timer_done

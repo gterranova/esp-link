@@ -57,12 +57,13 @@ XTENSA_TOOLS_ROOT ?= $(abspath ../esp-open-sdk/xtensa-lx106-elf/bin)/
 # Firmware version 
 # WARNING: if you change this expect to make code adjustments elsewhere, don't expect
 # that esp-link will magically work with a different version of the SDK!!!
-SDK_VERS ?= esp_iot_sdk_v2.1.0
+#SDK_VERS ?= sdk/ESP8266_NONOS_SDK-version_3.0.4
+SDK_VERS ?= sdk/ESP8266_NONOS_SDK
 
 # Try to find the firmware manually extracted, e.g. after downloading from Espressif's BBS,
 # http://bbs.espressif.com/viewforum.php?f=46
 # USING THE SDK BUNDLED WITH ESP-OPEN-SDK WILL NOT WORK!!!
-SDK_BASE ?= $(wildcard ../$(SDK_VERS))
+SDK_BASE ?= $(wildcard ./$(SDK_VERS))
 
 # If the firmware isn't there, see whether it got downloaded as part of esp-open-sdk
 # This used to work at some point, but is not supported, uncomment if you feel lucky ;-)
@@ -103,7 +104,7 @@ LED_SERIAL_PIN      ?= 14
 # --------------- esp-link modules config options ---------------
 
 # Optional Modules: mqtt rest socket web-server syslog
-MODULES ?= mqtt rest socket web-server syslog
+MODULES ?= mqtt rest socket web-server syslog alexa
 
 # --------------- esphttpd config options ---------------
 
@@ -126,7 +127,8 @@ GZIP_COMPRESSION ?= yes
 # https://code.google.com/p/htmlcompressor/#For_Non-Java_Projects
 # http://yui.github.io/yuicompressor/
 # enabled by default.
-COMPRESS_W_HTMLCOMPRESSOR ?= yes
+COMPRESS_W_NODE ?= yes
+COMPRESS_W_HTMLCOMPRESSOR ?= no
 HTML_COMPRESSOR ?= htmlcompressor-1.5.3.jar
 YUI_COMPRESSOR ?= yuicompressor-2.4.8.jar
 
@@ -427,10 +429,11 @@ endif
 $(BUILD_BASE)/espfs_img.o: html/ html/wifi/ espfs/mkespfsimage/mkespfsimage
 	$(Q) rm -rf html_compressed; mkdir html_compressed; mkdir html_compressed/wifi;
 	$(Q) cp -r html/*.ico html_compressed;
-	$(Q) cp -r html/*.css html_compressed;
-	$(Q) cp -r html/*.js html_compressed;
+	$(Q) cp -r html/*.xml html_compressed;
 	$(Q) cp -r html/wifi/*.png html_compressed/wifi;
-	$(Q) cp -r html/wifi/*.js html_compressed/wifi;
+ifeq ("$(COMPRESS_W_NODE)","yes")
+	$(Q) node f2hgz.js;
+else 
 ifeq ("$(COMPRESS_W_HTMLCOMPRESSOR)","yes")
 	$(Q) echo "Compressing assets with htmlcompressor. This may take a while..."
 	$(Q) java -jar tools/$(HTML_COMPRESSOR) \
@@ -454,15 +457,16 @@ else
 	$(Q) cp -r html/*.html html_compressed;
 	$(Q) cp -r html/wifi/*.html html_compressed/wifi;	
 endif
-ifeq (,$(findstring mqtt,$(MODULES)))
-	$(Q) rm -rf html_compressed/mqtt.html
-	$(Q) rm -rf html_compressed/mqtt.js
-endif
 	$(Q) for file in `find html_compressed -type f -name "*.htm*"`; do \
 	    cat html_compressed/head- $$file >$${file}-; \
 	    mv $$file- $$file; \
 	  done
 	$(Q) rm html_compressed/head-
+endif
+ifeq (,$(findstring mqtt,$(MODULES)))
+	$(Q) rm -rf html_compressed/mqtt.html
+	$(Q) rm -rf html_compressed/mqtt.js
+endif
 	$(Q) cd html_compressed; find . \! -name \*- | ../espfs/mkespfsimage/mkespfsimage > ../build/espfs.img; cd ..;
 	$(Q) ls -sl build/espfs.img
 	$(Q) cd build; $(OBJCP) -I binary -O elf32-xtensa-le -B xtensa --rename-section .data=.espfs \

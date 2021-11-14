@@ -1,0 +1,70 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "C:/Users/G.TERRANOVA/Projects/esp-link/include",
+                "C:/Users/G.TERRANOVA/Projects/esp-link/src",
+                "C:/Users/G.TERRANOVA/Projects/esp-link/lib/**",
+                "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include",
+                "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/extra_include",
+                "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/driver_lib/include",
+                "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/espressif",
+                "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/lwip",
+                "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/lwip/ipv4",
+                "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/lwip/ipv6",
+                "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/nopoll",
+                "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/ssl",
+                "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/json",
+                "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/openssl",
+                "C:/Users/G.TERRANOVA/.platformio/packages/tool-unity",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "C:/Users/G.TERRANOVA/Projects/esp-link/include",
+                    "C:/Users/G.TERRANOVA/Projects/esp-link/src",
+                    "C:/Users/G.TERRANOVA/Projects/esp-link/lib/**",
+                    "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include",
+                    "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/extra_include",
+                    "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/driver_lib/include",
+                    "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/espressif",
+                    "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/lwip",
+                    "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/lwip/ipv4",
+                    "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/lwip/ipv6",
+                    "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/nopoll",
+                    "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/ssl",
+                    "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/json",
+                    "C:/Users/G.TERRANOVA/.platformio/packages/framework-esp8266-nonos-sdk/include/openssl",
+                    "C:/Users/G.TERRANOVA/.platformio/packages/tool-unity",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=50203",
+                "ESP8266",
+                "ARDUINO_ARCH_ESP8266",
+                "ARDUINO_ESP8266_ESP01",
+                "F_CPU=80000000L",
+                "__ets__",
+                "ICACHE_FLASH",
+                ""
+            ],
+            "cStandard": "c99",
+            "cppStandard": "c++11",
+            "compilerPath": "C:/Users/G.TERRANOVA/.platformio/packages/toolchain-xtensa@1.40802.0/bin/xtensa-lx106-elf-gcc.exe",
+            "compilerArgs": [
+                "-mlongcalls",
+                "-mtext-section-literals",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}

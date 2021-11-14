@@ -76,6 +76,7 @@ static const MimeMap mimeTypes[] = {
   { "jpeg", "image/jpeg" },
   { "png", "image/png" },
   { "tpl", "text/html; charset=UTF-8" },
+  { "xml", "text/xml" },
   { NULL, "text/html" }, //default value
 };
 
@@ -124,7 +125,7 @@ static void ICACHE_FLASH_ATTR httpdRetireConn(HttpdConnData *conn) {
       conn->priv->code, dt, (unsigned long)system_get_free_heap_size());
 #else
     DBG("HTTP %s %s: %d, %ums, h=%ld\n",
-      conn->requestType == HTTPD_METHOD_GET ? "GET" : "POST", conn->url,
+      conn->requestType == HTTPD_METHOD_GET ? "GET" : (conn->requestType == HTTPD_METHOD_POST ? "POST" : "PUT"), conn->url,
       conn->priv->code, dt, (unsigned long)system_get_free_heap_size());
 #endif
 
@@ -424,6 +425,10 @@ static void ICACHE_FLASH_ATTR httpdParseHeader(char *h, HttpdConnData *conn) {
   }
   else if (os_strncmp(h, "POST ", 5) == 0) {
     conn->requestType = HTTPD_METHOD_POST;
+    first_line = true;
+  }
+  else if (os_strncmp(h, "PUT ", 4) == 0) {
+    conn->requestType = HTTPD_METHOD_PUT;
     first_line = true;
   }
 

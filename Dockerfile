@@ -12,10 +12,17 @@ RUN apt-get update \
  && apt-get install -y software-properties-common build-essential python curl git \
                        zlib1g-dev openjdk-8-jre-headless
 
+RUN curl --silent --location https://deb.nodesource.com/setup_16.x | /bin/bash - 
+
+RUN apt-get install -y nodejs
+
 RUN curl -Ls http://s3.voneicken.com/xtensa-lx106-elf-20160330.tgx | tar Jxf -
-RUN curl -Ls http://s3.voneicken.com/esp_iot_sdk_v2.1.0.tgx | tar -Jxf -
+#RUN curl -Ls https://codeload.github.com/espressif/ESP8266_NONOS_SDK/tar.gz/refs/tags/version_3.0.4 | tar -Jxf -
+#RUN curl -Ls http://s3.voneicken.com/esp_iot_sdk_v2.1.0.tgx | tar -Jxf -
+ENV SDK_ROOT /esp-link/sdk/
 
 ENV XTENSA_TOOLS_ROOT /xtensa-lx106-elf/bin/
+
 
 # This could be used to create an image with esp-link in it from github:
 #RUN git clone https://github.com/jeelabs/esp-link
@@ -26,6 +33,8 @@ ENV XTENSA_TOOLS_ROOT /xtensa-lx106-elf/bin/
 # Expect the esp-link source/home dir to be mounted here:
 VOLUME /esp-link
 WORKDIR /esp-link
+
+#RUN npm install
 
 # Default command is to run a build, can be overridden on the docker commandline:
 CMD make

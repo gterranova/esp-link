@@ -17,3 +17,6 @@ espfs/mkespfsimage/mman-win32/libmman.a
 .localhistory/
 local.conf
 *.tgz
+esp-link-v3.0.14-g963ffbb
+node_modules/
+sdk/ESP8266_NONOS_SDK-version_3.0.4/

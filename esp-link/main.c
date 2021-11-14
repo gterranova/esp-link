@@ -32,6 +32,8 @@
 #include "log.h"
 #include "gpio.h"
 #include "cgiservices.h"
+#include "alexa.h"
+#include "cgialexa.h"
 
 #ifdef WEBSERVER
 #include "web-server.h"
@@ -109,6 +111,13 @@ HttpdBuiltInUrl builtInUrls[] = {
   { "/services/info", cgiServicesInfo, NULL },
   { "/services/update", cgiServicesSet, NULL },
   { "/pins", cgiPins, NULL },
+  { "/setup.xml", cgiEspFsTemplate, tpl_hue_description },  
+  { "/upnp/control/basicevent1", cgiHandleUpnpEvent, NULL },
+  { "/description.xml", cgiEspFsTemplate, tpl_hue_description },  
+  { "/api", cgiHandleApiEvent, NULL },  
+  { "/api/*", cgiHandleApiEvent, NULL },  
+  { "/alexa", cgiAlexa, NULL },
+
 #ifdef MQTT
   { "/mqtt", cgiMqtt, NULL },
 #endif
@@ -223,6 +232,11 @@ user_init(void) {
     mqtt_client_init();
   }
 #endif
+  if (flashConfig.alexa_enable) {
+    NOTICE("initializing Alexa integration");
+    alexa_init();
+  }
+
   NOTICE("initializing user application");
   app_init();
   NOTICE("Waiting for work to do...");

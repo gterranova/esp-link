@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "serbridge.h": "c",
+        "cgi.h": "c",
+        "stk500v2.h": "c",
+        "serled.h": "c",
+        "pgmshared.h": "c",
+        "config.h": "c",
+        "httpd.h": "c",
+        "socket.h": "c",
+        "alexa.h": "c"
+    }
+}

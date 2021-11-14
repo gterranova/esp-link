@@ -34,6 +34,7 @@ FlashConfig flashDefault = {
   .data_bits	= EIGHT_BITS,
   .parity	= NONE_BITS,
   .stop_bits	= ONE_STOP_BIT,
+  .alexa_enable = 0, .alexa_devices = 4, .wemo_emulation = 0,
 };
 
 typedef union {

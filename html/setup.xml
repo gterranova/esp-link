@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<root>
+  <device>
+    <deviceType>urn:Belkin:device:controllee:1</deviceType>
+    <friendlyName>%FriendlyName%%DeviceId%</friendlyName>
+    <manufacturer>Belkin International Inc.</manufacturer>
+    <modelName>Socket</modelName>
+    <modelNumber>3.1415</modelNumber>
+    <UDN>uuid:%UUID%</UDN>
+    <serialNumber>%SerialNumber%</serialNumber>
+    <binaryState>0</binaryState>
+    <serviceList>
+      <service>
+        <serviceType>urn:Belkin:service:basicevent:%DeviceId%</serviceType>
+        <serviceId>urn:Belkin:serviceId:basicevent%DeviceId%</serviceId>
+        <controlURL>/upnp/control/basicevent%DeviceId%</controlURL>
+        <eventSubURL>/upnp/event/basicevent%DeviceId%</eventSubURL>
+        <SCPDURL>/eventservice.xml</SCPDURL>
+      </service>
+    </serviceList>
+  </device>
+</root>
