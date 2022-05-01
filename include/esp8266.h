@@ -3,7 +3,7 @@
 #define _ESP8266_H_
 
 #undef MEMLEAK_DEBUG
-#define USE_OPTIMIZE_PRINTF
+//#define USE_OPTIMIZE_PRINTF
 
 #include <user_config.h>
 #include <ctype.h>

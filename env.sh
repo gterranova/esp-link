@@ -1,0 +1,9 @@
+export SDK_DIR=/esp-link/packages/framework-esp8266-nonos-sdk
+export COMPILE=gcc
+export BOOT=new
+export APP="1"
+export SPI_SPEED=80
+export SPI_MODE=QIO
+export SPI_SIZE_MAP=4
+export XTENSA_TOOLS_ROOT=/xtensa-lx106-elf
+export PATH=/xtensa-lx106-elf/bin:$PATH

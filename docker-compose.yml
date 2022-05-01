@@ -6,6 +6,6 @@ services:
       context: .
       dockerfile: Dockerfile
     environment: 
-        FLASH_SIZE: 1MB
+        FLASH_SIZE: 4MB
     volumes: 
       - ".:/esp-link"

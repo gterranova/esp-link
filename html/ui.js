@@ -307,7 +307,12 @@ function getWifiInfo() {
 function showSystemInfo(data) {
   Object.keys(data).forEach(function(v) {
     setEditToClick("system-"+v, data[v]);
+    
   });
+  if (!$(".system-slip")[0].innerText) {
+    document.querySelectorAll(".system-slip")[0].parentElement.setAttribute("hidden", "");
+    document.querySelectorAll(".system-mqtt")[0].parentElement.setAttribute("hidden", "");
+  }
   $("#system-spinner").setAttribute("hidden", "");
   $("#system-table").removeAttribute("hidden");
   currAp = data.ssid;

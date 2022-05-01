@@ -1,1 +1,0 @@
-esptool.py write_flash 0x00000 esp-link-v3.0.14-g963ffbb\boot_v1.6.bin 0x01000 esp-link-v3.0.14-g963ffbb\user1.bin 0xFC000 esp-link-v3.0.14-g963ffbb\esp_init_data_default.bin 0xFE000 esp-link-v3.0.14-g963ffbb\blank.bin
