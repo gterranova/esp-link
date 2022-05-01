@@ -1,7 +1,7 @@
 #
 # Makefile for esp-link - https://github.com/jeelabs/esp-link
 #
-MODULES = espfs
+MODULES = espfs alexa spiffs
 #mqtt rest webserver
 
 GZIP_COMPRESSION ?= yes
@@ -31,10 +31,9 @@ endif
 
 .PHONY: all
 
-all: $(DATA_DIR) $(ESPFS_AR)
+all: $(ESPFS_AR)
 
 clean:
-	$(Q) rm -rf $(BUILD_DIR)
 	$(Q) rm -rf $(DATA_DIR)
 	$(Q) rm -rf $(ESPFS_AR)
 
@@ -47,15 +46,15 @@ $(DATA_DIR): $(HTML_PATH)/ $(HTML_PATH)/wifi/
 	$(Q) cp -r $(HTML_PATH)/*.xml $(DATA_DIR);
 	$(Q) cp -r $(HTML_PATH)/wifi/*.png $(DATA_DIR)/wifi;
 	$(Q) node $(NODE_APP) "$(HTML_PATH)" "$(DATA_DIR)";
-ifeq (,$(findstring mqtt,$(OPTIONAL_MODULES)))
+ifeq (,$(findstring mqtt,$(MODULES)))
 	$(Q) rm -rf $(DATA_DIR)/mqtt.html
 	$(Q) rm -rf $(DATA_DIR)/mqtt.js
 endif
-ifeq (,$(findstring webserver,$(OPTIONAL_MODULES)))
+ifeq (,$(findstring webserver,$(MODULES)))
 	$(Q) rm -rf $(DATA_DIR)/webserver.html
 	$(Q) rm -rf $(DATA_DIR)/userpage.js
 endif
-ifeq (,$(findstring alexa,$(OPTIONAL_MODULES)))
+ifeq (,$(findstring alexa,$(MODULES)))
 	$(Q) rm -rf $(DATA_DIR)/alexa.*
 	$(Q) rm -rf $(DATA_DIR)/*.xml
 endif
@@ -67,7 +66,7 @@ $(ESPFS_AR): $(DATA_DIR) $(BUILD_DIR) $(MKESPFSIMAGE_PATH)/mkespfsimage
 	$(Q) cd $(DATA_DIR); find . \! -name \*- | $(MKESPFSIMAGE_PATH)/mkespfsimage > $(BUILD_DIR)/espfs.img; cd ..;
 	$(Q) ls -sl $(BUILD_DIR)/espfs.img
 	cd $(BUILD_DIR); $(Q) $(OBJCP) -I binary -O elf32-xtensa-le -B xtensa --rename-section .data=.espfs espfs.img $(BUILD_DIR)/espfs_img.o; cd $(TOP_DIR)
-	rm -rf $(BUILD_DIR)/espfs.img
+	#rm -rf $(BUILD_DIR)/espfs.img
 	$(AR) cru $@ $(BUILD_DIR)/espfs_img.o
-	rm -rf $(BUILD_DIR)/espfs_img.o
+	#rm -rf $(BUILD_DIR)/espfs_img.o
 

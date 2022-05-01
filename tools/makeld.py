@@ -11,16 +11,18 @@ def freqdiv(spi_speed):
         return 2
     elif spi_speed == "80":
         return 15
-    return 0
+    return spi_speed
 
 def mode(spi_mode):
-    if spi_mode.upper() == "QOUT":
+    if spi_mode.upper() == "QIN":
+        return 0
+    elif spi_mode.upper() == "QOUT":
         return 1
     elif spi_mode.upper() == "DIO":
         return 2
     elif spi_mode.upper() == "DOUT":
         return 3
-    return 0
+    return spi_mode
 
 def config(spi_size_map, spi_mode, spi_speed, app, boot, LD_DIR) -> dict:
     defaults = { 
@@ -29,8 +31,8 @@ def config(spi_size_map, spi_mode, spi_speed, app, boot, LD_DIR) -> dict:
         "addr": "0x01000" if app != 2 else "0x41000" , 
         "app": app, 
         "LD_FILE": LD_DIR+"/eagle.app.v6.ld",
-        "mode": spi_mode,
-        "freqdiv": spi_speed }
+        "mode": mode(spi_mode),
+        "freqdiv": freqdiv(spi_speed) }
 
     if (spi_size_map == 0 or spi_size_map == 7 or spi_size_map > 9):
         return defaults
@@ -94,14 +96,24 @@ def mklds(spi_size_map, spi_mode, spi_speed, app, boot, ld_dir, output_dir):
             (r"len\s*=\s*0x6B000", 'len = 0x7C000'), 
             (r"_irom0_text_end = ABSOLUTE\(\.\);", '. = ALIGN (4);\n    *(.espfs)\n    _irom0_text_end = ABSOLUTE(.);')
         ]
+    patterns.append((r"/\*  Default entry point:  \*/", """PROVIDE ( _FS_start = 0x40300000 );
+PROVIDE ( _FS_end = 0x405FA000 );
+PROVIDE ( _FS_page = 0x100 );
+PROVIDE ( _FS_block = 0x2000 );
+/* The following symbols are DEPRECATED and will be REMOVED in a future release */
+PROVIDE ( _SPIFFS_start = 0x40300000 );
+PROVIDE ( _SPIFFS_end = 0x405FA000 );
+PROVIDE ( _SPIFFS_page = 0x100 );
+PROVIDE ( _SPIFFS_block = 0x2000 );
+
+/*  Default entry point:  */"""))
     sed_inplace(appconfig["LD_FILE"].replace('/', sep), patterns, outfile)
 
     return outfile
 
 if __name__=='__main__':
-    print(len(sys.argv), sys.argv)
     if len(sys.argv) != 8:
-        print('Usage: makeld.py spi_size_map spi_mode spi_speed boot app sdk_dir output_dir')
+        print('Usage: makeld.py boot spi_mode spi_speed spi_size_map app sdk_dir output_dir')
         sys.exit(0)
 
         """LD_DIR = 'sdk/ESP8266_NONOS_SDK/ld'
@@ -113,10 +125,11 @@ if __name__=='__main__':
         APP = 1"""
 
     boot = sys.argv[1]
-    spi_mode = sys.argv[2]
-    spi_speed = sys.argv[3]
+    spi_mode = mode(sys.argv[2])
+    spi_speed = freqdiv(sys.argv[3])
     spi_size_map = int(sys.argv[4])
     app = int(sys.argv[5])
     ld_dir = join(sys.argv[6], "ld")
     output_dir = sys.argv[7]
+    print(len(sys.argv), boot, spi_mode, spi_speed, spi_size_map, app, ld_dir, output_dir)    
     print(mklds(spi_size_map, spi_mode, spi_speed, app, boot, ld_dir, output_dir))

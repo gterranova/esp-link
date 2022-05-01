@@ -546,3 +546,24 @@ int ICACHE_FLASH_ATTR Ffile::size(Flashfs *t_fs, char *t_name)
     }
     return -1;
 }
+
+#define NOTICE(format, ...) do {                                            \
+  os_printf(format "\n", ## __VA_ARGS__);                                   \
+} while ( 0 )
+
+Flashfs espbot;
+
+void ICACHE_FLASH_ATTR espbot_init(void)
+{
+    espbot.init();
+    NOTICE("SPIFFS: ready");
+
+    // run some spiffs test
+    // start a 20 seconds timer for connecting a terminal to the serial port ...
+    /*
+    os_timer_t wait_20_secs;
+    os_timer_disarm(&wait_20_secs);
+    os_timer_setfn(&wait_20_secs, (os_timer_func_t *)run_tests, NULL);
+    os_timer_arm(&wait_20_secs, 20000, 0);
+    */
+}

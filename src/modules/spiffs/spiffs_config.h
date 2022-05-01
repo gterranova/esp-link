@@ -15,7 +15,8 @@
 // #include <stdio.h>
 // #include <stdlib.h>
 // #include <string.h>
-#include <stddef.h>
+// #include <stddef.h>
+#define offsetof(TYPE, MEMBER) __builtin_offsetof (TYPE, MEMBER)
 // #include <unistd.h>
 // #ifdef _SPIFFS_TEST
 // #include "testrunner.h"

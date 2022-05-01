@@ -12,8 +12,8 @@
 #     a generated lib/image xxx.a ()
 #
 TARGET = eagle
-#FLAVOR = release
-FLAVOR = debug
+FLAVOR = release
+#FLAVOR = debug
 
 #EXTRA_CCFLAGS += -u
 
@@ -25,7 +25,7 @@ SUBDIRS=    \
 	core    \
 	
 endif # } PDIR
-MODULES ?= espfs alexa
+MODULES ?= espfs alexa spiffs
 #mqtt rest socket webserver syslog
 APPDIR = .
 

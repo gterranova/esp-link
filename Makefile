@@ -11,6 +11,12 @@ CCFLAGS:= -I$(TOP_DIR)/include -I$(TOP_DIR)/src/include -I$(TOP_DIR)/src/modules
 		-I$(SDK_DIR)/include/ssl \
         -I$(SDK_DIR)/include/json \
         -I$(SDK_DIR)/include/openssl 
+CXXFLAGS:= -I$(TOP_DIR)/include -I$(TOP_DIR)/src/include -I$(TOP_DIR)/src/modules -I$(SDK_DIR)/include \
+        -I$(SDK_DIR)/include -I$(SDK_DIR)/extra_include -I$(SDK_DIR)/driver_lib/include -I$(SDK_DIR)/include/espressif \
+		-I$(SDK_DIR)/include/lwip -I$(SDK_DIR)/include/lwip/ipv4 -I$(SDK_DIR)/include/lwip/ipv6 -I$(SDK_DIR)/include/nopoll \
+		-I$(SDK_DIR)/include/ssl \
+        -I$(SDK_DIR)/include/json \
+        -I$(SDK_DIR)/include/openssl 
 LDFLAGS:= -L$(TOP_DIR)/libs -L$(SDK_DIR)/lib -L$(SDK_DIR)/ld $(LDFLAGS)
 
 V ?= $(VERBOSE)
@@ -55,7 +61,7 @@ ifeq ($(OS),Windows_NT)
 	else 
 		# It is gcc, may be cygwin
 		# Can we use -fdata-sections?
-		CCFLAGS += -ffunction-sections -fno-jump-tables -fdata-sections
+		CCFLAGS += -ffunction-sections -fdata-sections
 		AR = $(XTENSA_TOOLS_ROOT)/bin/xtensa-lx106-elf-ar
 		CC = $(XTENSA_TOOLS_ROOT)/bin/xtensa-lx106-elf-gcc
 		CXX = $(XTENSA_TOOLS_ROOT)/bin/xtensa-lx106-elf-g++
@@ -83,7 +89,7 @@ else
 	else
 		ESPPORT = $(COMPORT)
 	endif
-	CCFLAGS += -ffunction-sections -fno-jump-tables -fdata-sections
+	CCFLAGS += -ffunction-sections -fdata-sections
 	AR = $(XTENSA_TOOLS_ROOT)/bin/xtensa-lx106-elf-ar
 	CC = $(XTENSA_TOOLS_ROOT)/bin/xtensa-lx106-elf-gcc
 	CXX = $(XTENSA_TOOLS_ROOT)/bin/xtensa-lx106-elf-g++
@@ -157,13 +163,26 @@ GIT_VERSION := $(shell git --no-pager describe --tags --always --dirty)
 # "-Os" should be used to reduce code size
 #
 CCFLAGS += 			\
-	-Os -ggdb -std=gnu99 -Werror -Wpointer-arith -Wundef -Wall -Wl,-EL -fno-inline-functions \
-	-nostdlib -mlongcalls -mtext-section-literals -ffunction-sections -fdata-sections \
+	-std=c99 -Werror -Wpointer-arith -Wundef -Wall -Wl,-EL -fno-inline-functions \
+	-nostdlib -mlongcalls -mtext-section-literals \
 	-D__ets__ -DICACHE_FLASH -Wno-address -DFIRMWARE_SIZE=503808 -DMCU_RESET_PIN=12 -DMCU_ISP_PIN=13 \
-	-DLED_CONN_PIN=0 -DLED_SERIAL_PIN=14 -DESPFS_GZIP \
+	-DLED_CONN_PIN=0 -DLED_SERIAL_PIN=14 \
+	-DESPFS_GZIP -DSTA_SSID="FASTWEB-FKDH3S" -DSTA_PASS="5P7M3ST99P" -DGZIP_COMPRESSION -DCHANGE_TO_STA \
+	-DVERSION="esp-link $(GIT_VERSION)"
+
+CXXFLAGS += 			\
+	-c -fno-rtti -fno-exceptions -std=c++11 -Os -Wpointer-arith -Wundef -Wall \
+	-Wl,-EL -fno-inline-functions \
+	-nostdlib -mlongcalls -mtext-section-literals \
+	-ffunction-sections -fdata-sections -Wno-address \
+	-DESP8266 -DARDUINO_ARCH_ESP8266 -DARDUINO_ESP8266_ESP12 \
+	-D__ets__ -DICACHE_FLASH -Wno-address -DFIRMWARE_SIZE=503808 -DMCU_RESET_PIN=12 -DMCU_ISP_PIN=13 \
+	-DLED_CONN_PIN=0 -DLED_SERIAL_PIN=14 \
+	-DESPFS_GZIP -DSTA_SSID="FASTWEB-FKDH3S" -DSTA_PASS="5P7M3ST99P" -DGZIP_COMPRESSION -DCHANGE_TO_STA \
 	-DVERSION="esp-link $(GIT_VERSION)"
 
 CFLAGS = $(CCFLAGS) $(DEFINES) $(EXTRA_CCFLAGS) $(STD_CFLAGS) $(INCLUDES)
+CXFLAGS = $(CXXFLAGS) $(DEFINES) $(EXTRA_CXXFLAGS) $(STD_CFLAGS) $(INCLUDES)
 DFLAGS = $(CCFLAGS) $(DDEFINES) $(EXTRA_CCFLAGS) $(STD_CFLAGS) $(INCLUDES)
 
 
@@ -328,11 +347,11 @@ $(OBJODIR)/%.d: %.c
 $(OBJODIR)/%.o: %.cpp
 	$(vecho) "CPP $<"
 	@mkdir -p $(OBJODIR);
-	$(Q) $(CXX) $(if $(findstring $<,$(DSRCS)),$(DFLAGS),$(CFLAGS)) $(COPTS_$(*F)) -o $@ -c $<
+	$(Q) $(CXX) $(if $(findstring $<,$(DSRCS)),$(DFLAGS),$(CXFLAGS)) $(COPTS_$(*F)) -o $@ -c $<
 
 $(OBJODIR)/%.d: %.cpp
 	@mkdir -p $(OBJODIR);
-	@echo DEPEND: $(CXX) -M $(CFLAGS) $<
+	@echo DEPEND: $(CXX) -M $(CXFLAGS) $<
 	@set -e; rm -f $@; \
 	sed 's,\($*\.o\)[ :]*,$(OBJODIR)/\1 $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$

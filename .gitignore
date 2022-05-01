@@ -24,6 +24,4 @@ node_modules/
 sdk/
 packages/
 platforms/
-.vscode/c_cpp_properties.json
-.vscode/extensions.json
-.vscode/launch.json
+.vscode/

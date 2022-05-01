@@ -7,12 +7,16 @@ platform = env.PioPlatform()
 FRAMEWORK_DIR = platform.get_package_dir("framework-esp8266-nonos-sdk")
 assert isdir(FRAMEWORK_DIR)
 
+LDSCRIPT = env.BoardConfig().get("build.ldscript", "")
+APP = "1" if 'app1' in LDSCRIPT else ("2" if 'app2' in LDSCRIPT else "0")
+
 env.Execute(" ".join([
     "python tools/makeld.py",
-    "4", #"${__get_flash_size(__env__)}",
+    "new",
     "qio",
     "80", #"${__get_board_f_flash(__env__)}",
-    "new",
+    "4", #"${__get_flash_size(__env__)}",
+    APP,
     FRAMEWORK_DIR, 
     "$BUILD_DIR"
 ]))

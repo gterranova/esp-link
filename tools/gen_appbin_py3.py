@@ -35,6 +35,7 @@ import os
 import re
 import binascii
 import struct
+import shutil
 
 TEXT_ADDRESS = 0x40100000
 # app_entry = 0
@@ -141,21 +142,24 @@ def gen_appbin():
     flash_data_line  = 16
     data_line_bits = 0xf
 
-    irom0text_bin_name = os.path.join(output_path, 'eagle.app.v6.irom0text.bin')
-    text_bin_name = os.path.join(output_path, 'eagle.app.v6.text.bin')
-    data_bin_name = os.path.join(output_path, 'eagle.app.v6.data.bin')
-    rodata_bin_name = os.path.join(output_path, 'eagle.app.v6.rodata.bin')
-    flash_bin_name = os.path.join(output_path, 'eagle.app.flash.bin')
+    irom0text_bin_name = os.path.join(output_path, 'eagle.app.v6.irom0text.bin').replace('\\', '/')
+    text_bin_name = os.path.join(output_path, 'eagle.app.v6.text.bin').replace('\\', '/')
+    data_bin_name = os.path.join(output_path, 'eagle.app.v6.data.bin').replace('\\', '/')
+    rodata_bin_name = os.path.join(output_path, 'eagle.app.v6.rodata.bin').replace('\\', '/')
+    flash_bin_name = os.path.join(output_path, 'eagle.app.flash.bin').replace('\\', '/')
+    firmware_bin = os.path.join(output_path, 'firmware.bin').replace('\\', '/')
 
     if not os.path.exists(irom0text_bin_name):
         for section in [".irom0.text", ".text", ".data", ".rodata"]:
-            ofile = os.path.join(output_path, "eagle.app.v6.%s.bin" % section.replace('.',''))
+            ofile = os.path.join(output_path, "eagle.app.v6.%s.bin" % section.replace('.','')).replace('\\', '/')
             cmd = " ".join([OBJCOPY,"--only-section", section, "-O binary", elf_file, ofile])
             print("Copy section {0} to {1}".format(section, ofile))
             os.system(cmd)
 
     print ("Generate %s" % flash_bin_name)
-    sym_file = os.path.join(output_path, 'eagle.app.sym')
+    if os.path.exists(flash_bin_name):
+        os.unlink(flash_bin_name)
+    sym_file = os.path.join(output_path, 'eagle.app.sym').replace('\\', '/')
 
     BIN_MAGIC_FLASH  = 0xE9
     BIN_MAGIC_IROM   = 0xEA
@@ -290,9 +294,8 @@ def gen_appbin():
             all_bin_crc = abs(all_bin_crc) + 1
         print(all_bin_crc)
         write_file(flash_bin_name,(chr((all_bin_crc & 0x000000FF))+chr((all_bin_crc & 0x0000FF00) >> 8)+chr((all_bin_crc & 0x00FF0000) >> 16)+chr((all_bin_crc & 0xFF000000) >> 24)).encode())
-    cmd = 'rm "%s"' % sym_file
-    print (cmd)
-    os.system(cmd)
+    os.unlink(sym_file)
+    shutil.copy(flash_bin_name, firmware_bin)
     #cmd = 'DEL "%s"' % os.path.join(output_path, 'eagle.app.v6.*')
     #print (cmd)
     #os.system(cmd)

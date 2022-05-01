@@ -4,7 +4,7 @@
 #include "user_interface.h"
 #include "user_config.h"
 #ifdef SPIFFS
-//#include "spiffs/spiffs.h"
+#include "spiffs/spiffs.h"
 /*
  * this is a C++ function defined in espbot.cpp
  */
@@ -31,6 +31,8 @@ void ICACHE_FLASH_ATTR user_pre_init(void)
 
 // initialize the custom stuff that goes beyond esp-link
 void app_init() {
+    os_printf("SPIFFS: initializing\n");
 #ifdef SPIFFS
+    espbot_init();
 #endif
 }

@@ -54,6 +54,7 @@
                 "LED_SERIAL_PIN=14",
                 "ESPFS",
                 "ALEXA",
+                "SPIFFS",
                 "F_CPU=80000000L",
                 "__ets__",
                 "ICACHE_FLASH",
