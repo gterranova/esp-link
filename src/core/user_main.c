@@ -3,14 +3,6 @@
 #include "osapi.h"
 #include "user_interface.h"
 #include "user_config.h"
-#ifdef SPIFFS
-#include "spiffs/spiffs.h"
-/*
- * this is a C++ function defined in espbot.cpp
- */
-
-//void espbot_init(void);
-#endif
 
 static const partition_item_t at_partition_table[] = {
     { SYSTEM_PARTITION_BOOTLOADER, 						0x0, 												0x1000},
@@ -31,8 +23,5 @@ void ICACHE_FLASH_ATTR user_pre_init(void)
 
 // initialize the custom stuff that goes beyond esp-link
 void app_init() {
-    os_printf("SPIFFS: initializing\n");
-#ifdef SPIFFS
-    espbot_init();
-#endif
+
 }

@@ -48,6 +48,10 @@
 #include "alexa/cgialexa.h"
 #endif
 
+#ifdef SPIFFS
+#include "spiffs/cgispiffs.h"
+#endif
+
 #ifdef WEBSERVER
 #include "webserver/webserver.h"
 #endif
@@ -124,6 +128,10 @@ HttpdBuiltInUrl builtInUrls[] = {
   { "/services/info", cgiServicesInfo, NULL },
   { "/services/update", cgiServicesSet, NULL },
   { "/pins", cgiPins, NULL },
+#ifdef SPIFFS
+  { "/spiffs", cgiDirectory, NULL },
+  { "/spiffs/*", cgiHandleFile, NULL },
+#endif
 #ifdef ALEXA  
 #ifdef ESPFS
   { "/setup.xml", cgiEspFsTemplate, tpl_hue_description },  
@@ -262,6 +270,11 @@ user_init(void) {
     alexa_init();
   }
 #endif
+#ifdef SPIFFS
+    NOTICE("initializing SPIFFS");
+    spiffs_init();
+#endif
+
   NOTICE("initializing user application");
   app_init();
   NOTICE("Waiting for work to do...");

@@ -194,7 +194,7 @@ extern char *esp_link_version; // in user_main.c
 
 int ICACHE_FLASH_ATTR cgiMenu(HttpdConnData *connData) {
   if (connData->conn==NULL) return HTTPD_CGI_DONE; // Connection aborted. Clean up.
-  char buff[1024];
+  char buff[512];
   // don't use jsonHeader so the response does get cached
   noCacheHeaders(connData, 200);
   httpdHeader(connData, "Content-Type", "application/json");
@@ -205,29 +205,30 @@ int ICACHE_FLASH_ATTR cgiMenu(HttpdConnData *connData) {
   name[12] = 0;
   // construct json response
   os_sprintf(buff,
-    "{ "
-      "\"menu\": [ "
-        "\"Home\", \"/home.html\", "
-        "\"WiFi Station\", \"/wifi/wifiSta.html\", "
-        "\"WiFi Soft-AP\", \"/wifi/wifiAp.html\", "
-        "\"&#xb5;C Console\", \"/console.html\", "
-        "\"Services\", \"/services.html\", "
+    "{"
+      "\"menu\":["
+        "\"Home\",\"/home.html\","
+        "\"WiFi Station\",\"/wifi/wifiSta.html\","
+        "\"WiFi Soft-AP\",\"/wifi/wifiAp.html\","
+        "\"&#xb5;C Console\",\"/console.html\","
+        "\"Services\",\"/services.html\","
+        "\"SPIFFS\",\"/spiffs.html\","
 #ifdef ALEXA
-        "\"Alexa\", \"/alexa.html\", "
+        "\"Alexa\",\"/alexa.html\","
 #endif
 #ifdef MQTT
-        "\"REST/MQTT\", \"/mqtt.html\", "
+        "\"REST/MQTT\",\"/mqtt.html\","
 #endif
-        "\"Debug log\", \"/log.html\","
-        "\"Upgrade Firmware\", \"/flash.html\""
+        "\"Debug log\",\"/log.html\","
+        "\"Upgrade Firmware\",\"/flash.html\""
 #ifdef WEBSERVER
-        ",\"Web Server\", \"/webserver.html\""
+        ",\"Web Server\",\"/webserver.html\""
 	"%s"
 #endif
-      " ], "
-      "\"version\": \"%s\", "
-      "\"name\": \"%s\""
-    " }",
+      "],"
+      "\"version\":\"%s\","
+      "\"name\":\"%s\""
+    "}",
 #ifdef WEBSERVER    
   WEB_UserPages(), 
 #endif

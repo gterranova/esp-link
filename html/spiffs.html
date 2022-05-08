@@ -1,0 +1,46 @@
+<!doctype html>
+<html><head>
+  <title>esp-link</title>
+  <link rel="stylesheet" href="/pure.css">
+  <link rel="stylesheet" href="/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/ui.js"></script>
+</head>
+<body>
+<div id="layout">
+  <div id="main">
+    <div class="header">
+      <div><img src="favicon.ico" height="64"><span class="jl">JEELABS</span></div>
+      <h1 style="margin-top:0"><span class="esp">esp</span>-link</h1>
+      <h2 id="version"></h2>
+    </div>
+
+    <div class="content">
+      <div class="pure-g">
+        <!-- SINGLE COLUMN -->
+        <div class="pure-u-1">
+          <div class="card">
+            <h1>Files</h1>
+            <div id="files-spinner" class="spinner spinner-small"></div>
+            <div id="files-table">
+              <form action="#" id="filesform" class="pure-form pure-form-aligned form-narrow">
+                <input type="hidden" name="set-files" value="1">
+                <button id="set-files" type="submit" class="pure-button button-primary">Change!</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pure-g">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="spiffs.js"></script>
+<script type="text/javascript">
+onLoad(function() {
+  fetchSpiffs();
+});
+</script>
+</body></html>

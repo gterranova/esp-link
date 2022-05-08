@@ -95,7 +95,7 @@ CORE_MODULES = httpd serial cmd user
 
 # Optional Modules: mqtt rest socket webserver syslog alexa
 OPTIONAL_MODULES_PATH = src/modules/
-OPTIONAL_MODULES ?= espfs alexa
+OPTIONAL_MODULES ?= espfs alexa spiffs
 # spiffs espfs mqtt rest socket webserver syslog alexa
 # --------------- esphttpd config options ---------------
 
